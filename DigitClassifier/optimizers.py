@@ -1,5 +1,5 @@
 import numpy as np
-
+from copy import deepcopy
 
 class Adam:
     def __init__(self, first_beta, second_beta, dimensions, initializer):
@@ -9,7 +9,7 @@ class Adam:
         weights, biases = initializer(dimensions)
 
         # Copy one to keep separate instances for each moment
-        self.first_moment = {"Weights": weights.copy(), "Biases": biases.copy()}
+        self.first_moment = {"Weights": deepcopy(weights), "Biases": deepcopy(biases)}
         self.second_moment = {"Weights": weights, "Biases": biases}
 
         self.first_correction = self.first_beta
