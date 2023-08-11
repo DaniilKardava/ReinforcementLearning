@@ -25,7 +25,6 @@ class Network:
             layer.forward(a)
 
             a = layer.get_output()
-        # print("FORWARD END: " + str(datetime.now()))
         return a
 
     def backward(self, network_input, advantage, cross_entropy_index=None):
@@ -74,7 +73,6 @@ class Network:
             )
             current_layer.update_weights(weight_delta, bias_delta, self.step_size)
 
-        # print("BACKWARD END: " + str(datetime.now()))
 
     def backpropogate(self, network_input, advantage, cross_entropy_index=None):
 
