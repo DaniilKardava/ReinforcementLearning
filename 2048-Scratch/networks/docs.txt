@@ -1,0 +1,19 @@
+Updated version of the network class to incorporate new layer classes like cnn.
+
+activation_classes.py - layer activation functions and their derivatives. Classes generally have static methods unless they take parameters
+ex: leaky relu requires slope and therefore needs an instance with this unique argument. 
+
+pools.py - stores the max pooling class and static function.
+
+optimizers.py - stores the Adam class. Accepts arguments for first and second moment rates at creation. Weights are initialized separately once
+the exact dimensions are known, as they depend on the instance of the previous layer. Calculations are now performed in a single matrix operation
+since i no longer have lists of arrays with inconsistent dimensions (one weight array per layer).
+
+initializers.py - weight initializers now take explicit dimensions to generate random weights for.
+
+network.py - The network class now aims to be more general, relegating all calculations to layer class functions themselves. At initialization,
+the network, now containing all information about the layers, calls a build function for each layer class and provides relevant dimensions
+from the previous layer. The new forward function accepts an input, an output mask, and whether it should be applied on the logits
+or the final output... and returns the network output by looping through layers and calling their forward functions, passing the previous layers
+output. All relevant metrics about zs and activations are saved inside the class itself. The backward pass, like before, begins at the last
+layer and checks for cross entropy parameters. 
