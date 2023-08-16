@@ -202,8 +202,10 @@ class env_2048:
         return grid
 
     def get_3d_feature(self):
-        # Calculate list of binary features. Transpose to to align mutual terms. Reshape and flip so that small terms are in first channel.
-        h_stacked_channels = np.transpose(self.get_binary_feature())
+        # Calculate binary feature vector. Stack, aligning like terms columnwise and transpose to align like terms row wise. 
+        # Reshape to combine like terms into channels. Flip to index small terms first. 
+        feature_vector = self.get_binary_feature().reshape(16, 11)
+        h_stacked_channels = np.transpose(feature_vector)
         kernel = h_stacked_channels.reshape(11, 4, 4)
         kernel = kernel[::-1]
         return kernel
