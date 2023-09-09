@@ -54,12 +54,12 @@ class SharedNetwork():
             chosen_actions = tf.gather_nd(actor_probs, tf.stack([row_indices, action_indices], axis=1))
             chosen_actions = tf.reshape(chosen_actions, [-1, 1])
             
-            pg_loss = -advantage * tf.math.log(chosen_actions)
+            pg_loss = -tf.stop_gradient(advantage) * tf.math.log(chosen_actions)
             pg_loss = tf.reduce_mean(pg_loss) 
 
             ent_loss = -tf.reduce_mean(actor_probs * tf.math.log(actor_probs + 1e-9)) 
             
-            global_loss = pg_loss + vf_loss * self.vf_coef + ent_loss * self.ent_coef
+            global_loss = pg_loss + vf_loss * self.vf_coef - ent_loss * self.ent_coef
 
         gradients = tape.gradient(global_loss, self.model.trainable_variables)
         self.optimizer.apply_gradients(zip(gradients, self.model.trainable_variables))
