@@ -46,11 +46,11 @@ class SharedNetwork():
 
             # Treat advantage as a scalar
             chosen_action = actor_probs[0][action_index]
-            pg_loss = -advantage * tf.math.log(chosen_action)
+            pg_loss = -tf.stop_gradient(advantage) * tf.math.log(chosen_action)
             
             ent_loss = -tf.reduce_sum(actor_probs * tf.math.log(actor_probs + 1e-9))
 
-            global_loss = pg_loss + vf_loss * self.vf_coef + ent_loss * self.ent_coef
+            global_loss = pg_loss + vf_loss * self.vf_coef - ent_loss * self.ent_coef
 
         gradients = tape.gradient(global_loss, self.model.trainable_variables)
         self.optimizer.apply_gradients(zip(gradients, self.model.trainable_variables))
